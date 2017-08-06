@@ -38,7 +38,6 @@ $(function(){
 		}else{
 			$('.progress').hide();
 		}
-		//$('.change').html('<i class="fa fa-spin fa-refresh"></i>');
 	}
 
 	function updateData(){
