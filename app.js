@@ -6,27 +6,39 @@ $(function(){
 
 	$('#btn-update').on('click', function(){
 		updateChange()
+		return false;
 	})
 
 	$('#btn-calc').on('click', function(){
 		updateData()
+		return false;
 	})
 
+	$('.data-type, .data-input').on('change', function(){
+		updateData()
+	});
+
 	function updateChange(){
-		loader()
+		loader(true)
 		$.getJSON( "https://s3.amazonaws.com/dolartoday/data.json", function( data ) {
 			change['usd-vef'] = data["USD"]["promedio"];
 			$.getJSON( "https://blockchain.info/es/ticker", function( data ) {
 				change['btc-usd'] = data["USD"]["last"];
 				$(".change-usd-vef").text(change['usd-vef']);
 				$(".change-btc-usd").text(change['btc-usd']);
+				loader(false)
 				updateData()			
 			})
 		})
 	}
 
-	function loader(){
-		$('.change').html('<i class="fa fa-spin fa-refresh"></i>');
+	function loader(on){
+		if(on){
+			$('.progress').show();
+		}else{
+			$('.progress').hide();
+		}
+		//$('.change').html('<i class="fa fa-spin fa-refresh"></i>');
 	}
 
 	function updateData(){
@@ -48,15 +60,25 @@ $(function(){
 				$('.rs-btc').html( ((((data_input * 1 )/ change['usd-vef'])*1)/change['btc-usd']).toFixed(8) );
 				$('.rs-usd').html( ((data_input * 1 )/ change['usd-vef']).toFixed(2) );
 				$('.rs-vef').html( parseFloat(data_input).toFixed(2) );
-						break;
+				break;
 
-				}
+		}
 
-			}
+	}
 
 	function rule3(input, change){
 		x = (input * change) / 1;
 		return x;
+	}
+
+	function getQueryVariable(variable){
+		     var query = window.location.search.substring(1);
+		     var vars = query.split("&");
+		     for (var i=0;i<vars.length;i++) {
+		             var pair = vars[i].split("=");
+		             if(pair[0] == variable){return pair[1];}
+		     }
+		     return(false);
 	}
 
 	updateChange()

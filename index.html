@@ -1,73 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bitcoin calculator</title>
+<html>
+	<head>
+		<title>BitcoinCalc</title>
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	</head>
+	<body>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<div class="navbar-fixed">
+			<nav>
+ 				<div class="nav-wrapper blue lighten-2">
+					<div class="nav-wrapper container">
+						<a href="#" class="brand-logo">BitcoinCalc</a>
+					</div>
+ 				</div>
+			</nav>
+		</div>
 
-		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
-
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-	<div class="container">
-		<h1>Bitcoin calculator</h1>
-
-		<div class="row">
-			<div class="col-md-6">
-				<input type="number" class="form-control data-input" value=0 />
+		 <div class="progress">
+				  <div class="indeterminate"></div>
 			</div>
-			<div class="col-md-4">
-				<select class="form-control data-type">
-					<option value="BTC">BTC</option>
-					<option value="USD">USD</option>
-					<option value="VEF">VEF</option>
-				</select>
+
+			<div class="row container">
+					<div class="col s6">
+						<p class="flow-text">BTC 1<br/>USD <span class="change change-btc-usd">???</span></p>
+					</div>
+					<div class="col s6">
+						<p class="flow-text">USD 1<br/>VEF <span class="change change-usd-vef">???</span></p>
+					</div>			
+				</div>
+
 			</div>
-			<div class="col-md-2">
-				<button id="btn-calc" class="btn btn-primary btn-block">Calc</button>
+
+
+
+			<div class="row container">
+	 			<div class="input-field col s8">
+					<input type="number" class="data-input" value=0 />
+					<label for="first_name">Insert Number</label>
+				</div>
+
+				<div class="col s4">
+					<label>Currency</label>
+					<select class="data-type browser-default">
+						<option value="BTC">BTC</option>
+						<option value="USD">USD</option>
+						<option value="VEF">VEF</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="row container">
+				<div class="col s12">
+				<p class="flow-text">BTC <span class="rs-btc">???</span></p>
+				<p class="flow-text">USD <span class="rs-usd">???</span></p>
+				<p class="flow-text">VEF <span class="rs-vef">???</span></p>
+				</div>
 			</div>
 		</div>
-		<hr/>
-		<div class="row">
-			<div class="col-md-3">
-				<button id="btn-update" class="btn btn-success btn-block">
-				<div>BTC 1 = USD <span class="change change-btc-usd">???</span></div>
-				<div>USD 1 = VEF <span class="change change-usd-vef">???</span></div>
-				</button>
-			</div>
 
-
-			<div class="col-md-3">
-				<h4 class="form-control-static">BTC<br/><span class="rs-btc">???</span></h4>
-			</div>
-			<div class="col-md-3">
-				<h4 class="form-control-static">USD<br/><span class="rs-usd">???</span></h4>
-			</div>
-			<div class="col-md-3">
-				<h4 class="form-control-static">VEF<br/><span class="rs-vef">???</span></h4>
-			</div>
-
+		<div class="fixed-action-btn horizontal">
+			<a id="btn-update" class="btn-floating btn-large blue lighten-2">
+				<i class="large material-icons">sync</i>
+			</a>
 		</div>
-	</div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+
+		<script>
+			$(document).ready(function() {
+				$('select').material_select();
+			});
+		</script>
     <script src="app.js"></script>
-  </body>
+	</body>
 </html>
