@@ -37,14 +37,16 @@
 				</select>
 			</div>
 			<div class="col-md-2">
-				<button id="btn-update" class="btn btn-default btn-block">Update</button>
+				<button id="btn-calc" class="btn btn-primary btn-block">Calc</button>
 			</div>
 		</div>
 		<hr/>
 		<div class="row">
 			<div class="col-md-3">
-				<div>BTC 1 = USD <span class="change-btc-usd">???</span></div>
-				<div>USD 1 = VEF <span class="change-usd-vef">???</span></div>
+				<button id="btn-update" class="btn btn-success btn-block">
+				<div>BTC 1 = USD <span class="change change-btc-usd">???</span></div>
+				<div>USD 1 = VEF <span class="change change-usd-vef">???</span></div>
+				</button>
 			</div>
 
 
@@ -66,74 +68,6 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-		<script>
-			var change = {
-				"usd-vef": null,
-				"btc-usd": null
-			}
-
-
-			$('#btn-update').on('click', function(){
-
-
-				updateChange()
-
-			})
-
-
-			function updateChange(){
-
-				$.getJSON( "https://s3.amazonaws.com/dolartoday/data.json", function( data ) {
-					//alert(data["USD"]["promedio"])
-					change['usd-vef'] = data["USD"]["promedio"];
-					
-					$.getJSON( "https://blockchain.info/es/ticker", function( data ) {
-						change['btc-usd'] = data["USD"]["last"];
-						updateData();
-					})
-				})
-
-			}
-
-
-			function updateData(){
-				$(".change-usd-vef").text(change['usd-vef']);
-				$(".change-btc-usd").text(change['btc-usd']);
-
-				
-				var data_input = $('.data-input').val();
-				var data_type = $('.data-type').val();
-
-								
-
-				switch(data_type){
-					case 'BTC':
-						$('.rs-btc').html( parseFloat(data_input).toFixed(8) );
-						$('.rs-usd').html( (rule3(data_input, change['btc-usd'])).toFixed(2) );
-						$('.rs-vef').html( (rule3(data_input, change['btc-usd']) * change['usd-vef']).toFixed(2) );
-						break;
-					case 'USD':
-						$('.rs-btc').html( ((data_input * 1) / change['btc-usd']).toFixed(8) );
-						$('.rs-usd').html( parseFloat(data_input).toFixed(2) );
-						$('.rs-vef').html( (rule3(data_input, 1) * change['usd-vef']).toFixed(2) );
-						break;
-					case 'VEF':
-						$('.rs-btc').html( ((((data_input * 1 )/ change['usd-vef'])*1)/change['btc-usd']).toFixed(8) );
-						$('.rs-usd').html( ((data_input * 1 )/ change['usd-vef']).toFixed(2) );
-						$('.rs-vef').html( parseFloat(data_input).toFixed(2) );
-						break;
-
-				}
-
-			}
-
-			function rule3(input, change){
-				x = (input * change) / 1;
-				return x;
-			}
-
-		</script>
-
-
+    <script src="app.js"></script>
   </body>
 </html>
