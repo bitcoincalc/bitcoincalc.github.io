@@ -20,50 +20,63 @@
 			<div class="indeterminate"></div>
 		</div>
 
-		<div class="navbar-fixed">
-			<nav>
- 				<div class="nav-wrapper blue lighten-2">
-					<div class="nav-wrapper container">
-						<a href="#" class="brand-logo"><strong>BitcoinCalc</strong></a>
-					</div>
- 				</div>
-			</nav>
-		</div>
+			<div class="navbar-fixed">
+				<nav>
+	 				<div class="nav-wrapper blue lighten-2">
+						<div class="nav-wrapper container">
+							<a href="#" class="brand-logo"><strong>BitcoinCalc</strong></a>
+						</div>
+	 				</div>
+				</nav>
+			</div>
 
 			<div class="row container">
-					<div class="col s6">
-						<p class="flow-text">BTC 1<br/>USD <span class="change change-btc-usd">???</span></p>
-					</div>
-					<div class="col s6">
-						<p class="flow-text">USD 1<br/>VEF <span class="change change-usd-vef">???</span></p>
-					</div>			
+				<div class="col s6">
+					<p class="">BTC 1<br/>USD <span class="change change-btc-usd">???</span></p>
 				</div>
-
+				<div class="col s6">
+					<p class="">USD 1<br/>VEF <span class="change change-usd-vef">???</span></p>
+				</div>			
 			</div>
+
+		</div>
 
 
 
 			<div class="row container">
 	 			<div class="input-field col s8">
-					<input type="number" class="data-input" value=0 />
+					<input type="number" id="data-input" value=0 />
 					<label for="first_name">Insert Number</label>
 				</div>
 
-				<div class="col s4">
+				
+				<div class="input-field col s4">
+					<select id="data-type">
+						<option value="BTC">BTC</option>
+						<option value="USD">USD</option>
+						<option value="VEF">VEF</option>
+					</select>
+					<label>Currency</label>
+				</div>
+
+
+				<!-- <div class="col s4">
 					<label>Currency</label>
 					<select class="data-type browser-default">
 						<option value="BTC">BTC</option>
 						<option value="USD">USD</option>
 						<option value="VEF">VEF</option>
 					</select>
-				</div>
+				</div> -->
+
+
 			</div>
 
 			<div class="row container">
 				<div class="col s12">
-				<p class="flow-text">BTC <span class="rs-btc">???</span></p>
-				<p class="flow-text">USD <span class="rs-usd">???</span></p>
-				<p class="flow-text">VEF <span class="rs-vef">???</span></p>
+				<p class="">BTC <span class="rs-btc">???</span></p>
+				<p class="">USD <span class="rs-usd">???</span></p>
+				<p class="">VEF <span class="rs-vef">???</span></p>
 				</div>
 			</div>
 		</div>
@@ -80,7 +93,7 @@
 
 		<script>
 			$(document).ready(function() {
-				$('select').material_select();
+				
 			});
 		</script>
     <script src="app.js"></script>

@@ -1,4 +1,5 @@
 $(function(){
+	
 	var change = {
 		"usd-vef": null,
 		"btc-usd": null
@@ -14,9 +15,13 @@ $(function(){
 		return false;
 	})
 
-	$('.data-type, .data-input').on('change', function(){
+	$('#data-input').on('keyup', function(){
 		updateData()
-	});
+	})
+
+	$('#data-type').on('change', function(){
+		updateData()
+	}).material_select();
 
 	function updateChange(){
 		loader(true)
@@ -41,8 +46,8 @@ $(function(){
 	}
 
 	function updateData(){
-		var data_input = $('.data-input').val();
-		var data_type = $('.data-type').val();
+		var data_input = $('#data-input').val();
+		var data_type = $('#data-type').val();
 
 		switch(data_type){
 			case 'BTC':
