@@ -1,105 +1,98 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>BitcoinCalc</title>
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="theme-color" content="#0d47a1">
+<head>
+  <title>BitcoinCalc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#0d47a1">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <style>
+    .progress{
+      margin: 0;
+    }
+    .parent {
+      position: relative;
+      overflow: hidden;
+      height: 80px;
+    }
+    .child {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 50;
+    }
+    .content {
+      position: absolute;
+      top: 20px;
+      left: 10px;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <div class="progress">
+    <div class="indeterminate"></div>
+  </div>
 
-		<style>
-			.progress{
-				margin: 0;
-			}
-		</style>
-
-
-	</head>
-	<body>
-		<div class="progress">
-			<div class="indeterminate"></div>
-		</div>
-
-			<div class="navbar-fixed">
-				<nav>
-	 				<div class="nav-wrapper blue darken-4">
-						<div class="nav-wrapper container">
-							<a href="#" class="brand-logo"><strong>BitcoinCalc</strong></a>
-						</div>
-	 				</div>
-				</nav>
-			</div>
-
-			<div class="row container">
-				<div class="col s6">
-          <div class="card-panel yellow darken-2">
-            BTC 1<br/>USD <span class="change change-btc-usd">???</span>
+    <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper blue darken-4">
+          <div class="nav-wrapper container">
+            <a href="#" class="brand-logo"><strong>BitcoinCalc</strong></a>
           </div>
-				</div>
-				<div class="col s6">
-          <div class="card-panel green darken-2">
-					  USD 1<br/>VEF <span class="change change-usd-vef">???</span>
-          </div>
-				</div>			
-			</div>
+        </div>
+      </nav>
+    </div>
 
-		</div>
+    <div class="row container">
+      <div class="col s6">
+        <div class="card-panel yellow darken-2 parent">
+          <div class="fa fa-bitcoin child fa-5x yellow-text"></div>
+          <div class="content">BTC 1<br/>USD <strong class="change change-btc-usd">???</strong></div>
+        </div>
+      </div>
+      <div class="col s6">
+        <div class="card-panel green darken-2 parent">
+          <i class="fa fa-dollar fa-5x green-text child"></i>
+          <div class="content">USD 1<br/>VEF <strong class="change change-usd-vef">???</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
+    <div class="row container">
+      <div class="input-field col s8">
+        <input type="number" id="data-input" value=0 />
+        <label for="first_name">Insert Number</label>
+      </div>
+      <div class="input-field col s4">
+        <select id="data-type">
+          <option value="BTC">BTC</option>
+          <option value="USD">USD</option>
+          <option value="VEF">VEF</option>
+        </select>
+        <label>Currency</label>
+      </div>
+    </div>
 
+    <div class="row container">
+      <div class="col s12">
+      <p class="">BTC <span class="rs-btc">???</span></p>
+      <p class="">USD <span class="rs-usd">???</span></p>
+      <p class="">VEF <span class="rs-vef">???</span></p>
+      </div>
+    </div>
+  </div>
 
-			<div class="row container">
-	 			<div class="input-field col s8">
-					<input type="number" id="data-input" value=0 />
-					<label for="first_name">Insert Number</label>
-				</div>
+  <div class="fixed-action-btn horizontal">
+    <a id="btn-update" class="btn-floating btn-large blue darken-4">
+      <i class="large material-icons">sync</i>
+    </a>
+  </div>
 
-				
-				<div class="input-field col s4">
-					<select id="data-type">
-						<option value="BTC">BTC</option>
-						<option value="USD">USD</option>
-						<option value="VEF">VEF</option>
-					</select>
-					<label>Currency</label>
-				</div>
-
-
-				<!-- <div class="col s4">
-					<label>Currency</label>
-					<select class="data-type browser-default">
-						<option value="BTC">BTC</option>
-						<option value="USD">USD</option>
-						<option value="VEF">VEF</option>
-					</select>
-				</div> -->
-
-
-			</div>
-
-			<div class="row container">
-				<div class="col s12">
-				<p class="">BTC <span class="rs-btc">???</span></p>
-				<p class="">USD <span class="rs-usd">???</span></p>
-				<p class="">VEF <span class="rs-vef">???</span></p>
-				</div>
-			</div>
-		</div>
-
-		<div class="fixed-action-btn horizontal">
-			<a id="btn-update" class="btn-floating btn-large blue darken-4">
-				<i class="large material-icons">sync</i>
-			</a>
-		</div>
-
-
-		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
-
-		<script>
-			$(document).ready(function() {
-				
-			});
-		</script>
-    <script src="app.js"></script>
-	</body>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+  <script src="app.js"></script>
+</body>
 </html>
