@@ -1,5 +1,6 @@
 $(function(){
-	
+  getUrlOnLoad();
+  
 	var change = {
 		"usd-vef": null,
 		"btc-usd": null
@@ -53,17 +54,17 @@ $(function(){
 		var data_type = $('#data-type').val();
 
 		switch(data_type){
-			case 'BTC':
+			case 'btc':
 				$('.rs-btc').html( parseFloat(data_input).toFixed(8) );
 				$('.rs-usd').html( (rule3(data_input, change['btc-usd'])).toFixed(2) );
 				$('.rs-vef').html( (rule3(data_input, change['btc-usd']) * change['usd-vef']).toFixed(2) );
 				break;
-			case 'USD':
+			case 'usd':
 				$('.rs-btc').html( ((data_input * 1) / change['btc-usd']).toFixed(8) );
 				$('.rs-usd').html( parseFloat(data_input).toFixed(2) );
 				$('.rs-vef').html( (rule3(data_input, 1) * change['usd-vef']).toFixed(2) );
 				break;
-			case 'VEF':
+			case 'vef':
 				$('.rs-btc').html( ((((data_input * 1 )/ change['usd-vef'])*1)/change['btc-usd']).toFixed(8) );
 				$('.rs-usd').html( ((data_input * 1 )/ change['usd-vef']).toFixed(2) );
 				$('.rs-vef').html( parseFloat(data_input).toFixed(2) );
@@ -78,20 +79,32 @@ $(function(){
 		return x;
 	}
 
-	function getQueryVariable(variable){
+	function getQueryVariable(name){
 		     var query = window.location.search.substring(1);
 		     var vars = query.split("&");
 		     for (var i=0;i<vars.length;i++) {
 		             var pair = vars[i].split("=");
-		             if(pair[0] == variable){return pair[1];}
+		             if(pair[0] == name){return pair[1];}
 		     }
 		     return(false);
 	}
+  
+  function getUrlOnLoad(){
+    if(btc = getQueryVariable('btc')){
+      $('#data-input').val(btc);
+      $('#data-type').val('btc');
+    }else if(usd = getQueryVariable('usd')){
+      $('#data-input').val(usd);
+      $('#data-type').val('usd');
+    }else if(vef = getQueryVariable('vef')){
+      $('#data-input').val(vef);
+      $('#data-type').val('vef');
+    }
+  }
 
-	updateChange()
+	updateChange();
 
 	setInterval(function(){ updateChange() }, 36000000);
 });
-		
 
 
