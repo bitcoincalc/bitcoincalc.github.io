@@ -40,8 +40,11 @@ $(function(){
 	function loader(on){
 		if(on){
 			$('.progress').show();
+      $('#btn-update .fa').addClass('fa-spin');
+      
 		}else{
 			$('.progress').hide();
+      $('#btn-update .fa').removeClass('fa-spin');
 		}
 	}
 
