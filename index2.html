@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BitcoinCalc</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#0d47a1">
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <style>
+    .progress{
+      margin: 0;
+    }
+    .parent {
+      position: relative;
+      overflow: hidden;
+      height: 90px;
+    }
+    .child {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 50;
+    }
+    .content {
+      position: absolute;
+      top: 20px;
+      left: 10px;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <!-- <div class="progress">
+    <div class="indeterminate"></div>
+  </div> -->
+
+    <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper blue darken-2">
+          <div class="nav-wrapper container">
+            <a href="#" class="brand-logo"><strong>BitcoinCalc</strong></a>
+          </div>
+        </div>
+      </nav>
+    </div>
+    
+    <div class="section container">
+      <div class="row">
+        <div class="col s6">
+          <div class="card-panel yellow darken-2 parent">
+            <div class="fa fa-bitcoin child fa-5x yellow-text"></div>
+            <div class="content">
+              BTC 1<br/>
+              USD <strong class="change change-btc-usd">???</strong><br/>
+              <small>VEF <strong class="change change-btc-vef">???</strong></small>
+            </div>
+          </div>
+        </div>
+        <div class="col s6">
+          <div class="card-panel green darken-2 parent">
+            <i class="fa fa-dollar fa-5x green-text child"></i>
+            <div class="content">USD 1<br/>VEF <strong class="change change-usd-vef">???</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section container">
+      <div class="row">
+        <div class="input-field col s8">
+          <input type="number" id="data-input" value=0 />
+          <label for="first_name">Insert Number</label>
+        </div>
+        <div class="input-field col s4">
+          <select id="data-type">
+            <option value="btc">BTC</option>
+            <option value="usd">USD</option>
+            <option value="vef">VEF</option>
+          </select>
+          <label>Currency</label>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section container">
+      <p>BTC <strong class="rs-btc">???</strong>
+        <br/>Stuff
+      </p>
+    </div>
+    
+    <div class="section container">
+      <p>USD <strong class="rs-usd">???</strong>
+        <br/>Stuff
+      </p>
+    </div>
+    
+    <div class="section container">
+      <p>VEF <strong class="rs-vef">???</strong>
+        <br/>Stuff
+      </p>
+    </div>
+    
+  
+
+  <div class="fixed-action-btn horizontal">
+    <a id="btn-update" class="btn-floating btn-large blue darken-2">
+      <!--<i class="large material-icons">sync</i>-->
+      <i class="fa fa-refresh"></i>
+    </a>
+  </div>
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+  <script src="jsonprice.js"></script>
+  <script type="text/javascript">
+    
+    $(function(){
+      
+      var change = {
+        'btc-usd': 0,
+        'btc-vef': 0,
+        'usd-vef': 0,
+      };
+      
+      $('#data-type').on('change', function(){
+        updateData();
+      }).material_select();
+      
+      function rule3(input, price){
+        x = (input * price) / 1;
+        return x;
+      }
+      
+      function format(input,digits){
+        return parseFloat(input).toFixed(digits);
+      }
+      
+      function updateData(){
+        var data_input = $('#data-input').val();
+        var data_type = $('#data-type').val();
+        switch(data_type){
+          case 'btc':
+            $('.rs-btc').html( format(data_input, 8) );
+            $('.rs-usd').html( format(rule3(data_input, change['btc-usd']), 2) );
+            $('.rs-vef').html( format(rule3(data_input, change['btc-vef']), 2) );
+            break;
+          case 'usd':
+            $('.rs-btc').html( ((data_input * 1) / change['btc-usd']).toFixed(8) );
+            $('.rs-usd').html( format(data_input, 2) );
+            $('.rs-vef').html( (rule3(data_input, 1) * change['usd-vef']).toFixed(2) );
+            break;
+          case 'vef':
+            $('.rs-btc').html( ((((data_input * 1 )/ change['usd-vef'])*1)/change['btc-usd']).toFixed(8) );
+            $('.rs-usd').html( ((data_input * 1 )/ change['usd-vef']).toFixed(2) );
+            $('.rs-vef').html( format(data_input, 2) );
+            break;
+        }
+      }
+      
+      var btc_usd = $.jsonPrice({
+        url: "https://blockchain.info/es/ticker",
+        jsonValue: "USD.15m",
+        coinFrom: 'BTC',
+        coinTo: 'USD',
+        dataFrom: 'blockchain.info',
+        actionUpdate: function(price){
+          $('.change-btc-usd').text(price);
+          change['btc-usd'] = price;
+          updateData();
+        }
+      });
+      btc_usd.update();
+      
+      var usd_vef = $.jsonPrice({
+        url: "https://s3.amazonaws.com/dolartoday/data.json",
+        jsonValue: "USD.dolartoday",
+        coinFrom: 'USD',
+        coinTo: 'VEF',
+        dataFrom: 'dolartoday',
+        actionUpdate: function(price){
+          $('.change-usd-vef').text(price);
+          change['usd-vef'] = price;
+          updateData();
+        }
+      });
+      usd_vef.update();
+      
+      var btc_vef = $.jsonPrice({
+        url: "https://cors-anywhere.herokuapp.com/https://localbitcoins.com/bitcoinaverage/ticker-all-currencies",
+        jsonValue: "VEF.avg_1h",
+        coinFrom: 'BTC',
+        coinTo: 'VEF',
+        dataFrom: 'localbitcoins.com',
+        actionUpdate: function(price){
+          $('.change-btc-vef').text(price);
+          change['btc-vef'] = price;
+          updateData();
+        }
+      });
+      btc_vef.update();
+      
+    });
+  </script>
+</body>
+</html>
