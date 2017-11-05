@@ -12,22 +12,26 @@
     .progress{
       margin: 0;
     }
-    .parent {
+    .parent{
       position: relative;
       overflow: hidden;
-      height: 80px;
+      height: 95px;
     }
-    .child {
+    .child{
       position: absolute;
       top: 10px;
       right: 10px;
       z-index: 50;
     }
-    .content {
+    .content{
       position: absolute;
       top: 20px;
       left: 10px;
+      width: 80%;
       z-index: 100;
+    }
+    .source-link a{
+      color: inherit;
     }
   </style>
 </head>
@@ -50,13 +54,21 @@
       <div class="col s6">
         <div class="card-panel yellow darken-2 parent">
           <div class="fa fa-bitcoin child fa-5x yellow-text"></div>
-          <div class="content">BTC 1<br/>USD <strong class="change change-btc-usd">???</strong></div>
+          <div class="content">
+            <div>BTC <strong>1</strong></div>
+            <div>USD <strong class="change change-btc-usd-cmc">???</strong> <span  class="source-link">(<a href="https://coinmarketcap.com/">cmc</a>)</span></div>
+            <div>VEF <strong class="change change-btc-vef-lbtc">???</strong> <span  class="source-link">(<a href="https://localbitcoins.com/">lbtc</a>)</span></div>
+          </div>
         </div>
       </div>
       <div class="col s6">
         <div class="card-panel green darken-2 parent">
           <i class="fa fa-dollar fa-5x green-text child"></i>
-          <div class="content">USD 1<br/>VEF <strong class="change change-usd-vef">???</strong></div>
+          <div class="content">
+            USD <strong>1</strong><br/>
+            VEF <strong class="change change-usd-vef-dt">???</strong> <span  class="source-link">(<a href="https://dolartoday.com/">dt</a>)</span><br/>
+            VEF <strong class="change change-usd-vef-lbtc">???</strong> <span class="source-link">(<a href="https://localbitcoins.com/">lbtc</a>/<a href="https://coinmarketcap.com/">cmc</a>)</span>
+          </div>
         </div>
       </div>
     </div>
@@ -84,7 +96,7 @@
           <li class="collection-item">USD <strong class="rs-usd">???</strong></li>
           <li class="collection-item">VEF <strong class="rs-vef">???</strong></li>
         </ul>
-        
+
       </div>
     </div>
   </div>

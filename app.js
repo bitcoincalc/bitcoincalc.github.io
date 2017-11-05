@@ -1,9 +1,11 @@
 $(function(){
   getUrlOnLoad();
-  
+
 	var change = {
-		"usd-vef": null,
-		"btc-usd": null
+		"usd-vef-dt": null,
+		"btc-usd-cmc": null,
+    "btc-vef-lbtc": null,
+    "usd-vef-lbtc": null,
 	}
 
 	$('#btn-update').on('click', function(){
@@ -27,13 +29,19 @@ $(function(){
 	function updateChange(){
 		loader(true)
 		$.getJSON( "https://s3.amazonaws.com/dolartoday/data.json", function( data ) {
-			change['usd-vef'] = data["USD"]["promedio"];
-			$.getJSON( "https://blockchain.info/es/ticker", function( data ) {
-				change['btc-usd'] = data["USD"]["last"];
-				$(".change-usd-vef").text(change['usd-vef']);
-				$(".change-btc-usd").text(change['btc-usd']);
-				loader(false)
-				updateData()			
+			change['usd-vef-dt'] = data["USD"]["dolartoday"];
+			$.getJSON( "https://api.coinmarketcap.com/v1/ticker/bitcoin/", function( data ) {
+				change['btc-usd-cmc'] = data[0]["price_usd"];
+        $.getJSON( "https://cors-anywhere.herokuapp.com/https://localbitcoins.com/bitcoinaverage/ticker-all-currencies/", function( data ) {
+          change['btc-vef-lbtc'] = data["VEF"]["avg_1h"];
+          change['usd-vef-lbtc'] = change['btc-vef-lbtc']/change['btc-usd-cmc'];
+          $(".change-usd-vef-dt").text(change['usd-vef-dt']);
+          $(".change-usd-vef-lbtc").text(parseFloat(change['usd-vef-lbtc']).toFixed(2));
+  				$(".change-btc-usd-cmc").text(change['btc-usd-cmc']);
+          $(".change-btc-vef-lbtc").text(change['btc-vef-lbtc']);
+  				loader(false)
+  				updateData()
+        })
 			})
 		})
 	}
@@ -42,7 +50,7 @@ $(function(){
 		if(on){
 			$('.progress').show();
       $('#btn-update .fa').addClass('fa-spin');
-      
+
 		}else{
 			$('.progress').hide();
       $('#btn-update .fa').removeClass('fa-spin');
@@ -56,22 +64,20 @@ $(function(){
 		switch(data_type){
 			case 'btc':
 				$('.rs-btc').html( parseFloat(data_input).toFixed(8) );
-				$('.rs-usd').html( (rule3(data_input, change['btc-usd'])).toFixed(2) );
-				$('.rs-vef').html( (rule3(data_input, change['btc-usd']) * change['usd-vef']).toFixed(2) );
+				$('.rs-usd').html( (rule3(data_input, change['btc-usd-cmc'])).toFixed(2) );
+				$('.rs-vef').html( (rule3(data_input, change['btc-vef-lbtc'])).toFixed(2) );
 				break;
 			case 'usd':
-				$('.rs-btc').html( ((data_input * 1) / change['btc-usd']).toFixed(8) );
-				$('.rs-usd').html( parseFloat(data_input).toFixed(2) );
-				$('.rs-vef').html( (rule3(data_input, 1) * change['usd-vef']).toFixed(2) );
+        $('.rs-usd').html( parseFloat(data_input).toFixed(2) );
+        $('.rs-btc').html( ((data_input * 1) / change['btc-usd-cmc']).toFixed(8) );
+				$('.rs-vef').html( (rule3(data_input, 1) * change['usd-vef-dt']).toFixed(2) );
 				break;
 			case 'vef':
-				$('.rs-btc').html( ((((data_input * 1 )/ change['usd-vef'])*1)/change['btc-usd']).toFixed(8) );
-				$('.rs-usd').html( ((data_input * 1 )/ change['usd-vef']).toFixed(2) );
+				$('.rs-btc').html( ((data_input * 1 )/ change['btc-vef-lbtc']).toFixed(8) );
+				$('.rs-usd').html( ((data_input * 1 )/ change['usd-vef-dt']).toFixed(2) );
 				$('.rs-vef').html( parseFloat(data_input).toFixed(2) );
 				break;
-
 		}
-
 	}
 
 	function rule3(input, change){
@@ -88,7 +94,7 @@ $(function(){
 		     }
 		     return(false);
 	}
-  
+
   function getUrlOnLoad(){
     if(btc = getQueryVariable('btc')){
       $('#data-input').val(btc);
@@ -106,5 +112,3 @@ $(function(){
 
 	setInterval(function(){ updateChange() }, 36000000);
 });
-
-
