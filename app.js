@@ -18,8 +18,6 @@ $(function(){
 		return false;
 	})
 
-
-
 	$('#data-input')
     .on('keyup', function(){
   		updateData()
@@ -35,6 +33,31 @@ $(function(){
     history.pushState(null, "", "?"+data_type+"="+data_input);
   }
 
+  function updateChange(){
+    loader(true)
+    $.getJSON( "https://s3.amazonaws.com/dolartoday/data.json", function( data ) {
+      change['usd-vef-dt'] = data["USD"]["dolartoday"];
+      $(".change-usd-vef-dt").text(change['usd-vef-dt']);
+      loader(false)
+      updateData()
+    })
+    $.getJSON( "https://api.coinmarketcap.com/v1/ticker/bitcoin/", function( data ) {
+      change['btc-usd-cmc'] = data[0]["price_usd"];
+      $(".change-btc-usd-cmc").text(change['btc-usd-cmc']);
+      loader(false)
+      updateData()
+    })
+    $.getJSON( "https://cors-anywhere.herokuapp.com/https://localbitcoins.com/bitcoinaverage/ticker-all-currencies/", function( data ) {
+      change['btc-vef-lbtc'] = data["VEF"]["avg_1h"];
+      change['usd-vef-lbtc'] = change['btc-vef-lbtc']/change['btc-usd-cmc'];
+      $(".change-usd-vef-lbtc").text(parseFloat(change['usd-vef-lbtc']).toFixed(2));
+      $(".change-btc-vef-lbtc").text(change['btc-vef-lbtc']);
+      loader(false)
+      updateData()
+    })
+  }
+
+  /*
 	function updateChange(){
 		loader(true)
 		$.getJSON( "https://s3.amazonaws.com/dolartoday/data.json", function( data ) {
@@ -54,6 +77,7 @@ $(function(){
 			})
 		})
 	}
+  */
 
 	function loader(on){
 		if(on){
