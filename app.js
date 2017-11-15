@@ -18,13 +18,24 @@ $(function(){
 		return false;
 	})
 
-	$('#data-input').on('keyup', function(){
-		updateData()
-	})
+
+
+	$('#data-input')
+    .on('keyup', function(){
+  		updateData()
+  	})
+    .on('blur', function(){
+      updateUrl($('#data-type').val(), $(this).val())
+    })
 
 	$('#data-type').on('change', function(){
 		updateData()
+    updateUrl($(this).val(), $('#data-input').val())
 	}).material_select();
+
+  function updateUrl(data_type, data_input){
+    history.pushState(null, "", "?"+data_type+"="+data_input);
+  }
 
 	function updateChange(){
 		loader(true)
