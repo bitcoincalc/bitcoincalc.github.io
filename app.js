@@ -2,10 +2,10 @@ $(function(){
   getUrlOnLoad();
 
 	var change = {
-		"usd-vef-dt": null,
+		"usd-ves-dt": null,
 		"btc-usd-cmc": null,
-    "btc-vef-lbtc": null,
-    "usd-vef-lbtc": null,
+    "btc-ves-lbtc": null,
+    "usd-ves-lbtc": null,
 	}
 
 	$('#btn-update').on('click', function(){
@@ -36,8 +36,8 @@ $(function(){
   function updateChange(){
     loader(true)
     $.getJSON( "https://s3.amazonaws.com/dolartoday/data.json", function( data ) {
-      change['usd-vef-dt'] = data["USD"]["dolartoday"];
-      $(".change-usd-vef-dt").text(change['usd-vef-dt']);
+      change['usd-ves-dt'] = data["USD"]["dolartoday"];
+      $(".change-usd-ves-dt").text(change['usd-ves-dt']);
       loader(false)
       updateData()
     })
@@ -48,10 +48,10 @@ $(function(){
       updateData()
     })
     $.getJSON( "https://cors-anywhere.herokuapp.com/https://localbitcoins.com/bitcoinaverage/ticker-all-currencies/", function( data ) {
-      change['btc-vef-lbtc'] = data["VEF"]["avg_1h"];
-      change['usd-vef-lbtc'] = change['btc-vef-lbtc']/change['btc-usd-cmc'];
-      $(".change-usd-vef-lbtc").text(parseFloat(change['usd-vef-lbtc']).toFixed(2));
-      $(".change-btc-vef-lbtc").text(change['btc-vef-lbtc']);
+      change['btc-ves-lbtc'] = data["VES"]["avg_1h"];
+      change['usd-ves-lbtc'] = change['btc-ves-lbtc']/change['btc-usd-cmc'];
+      $(".change-usd-ves-lbtc").text(parseFloat(change['usd-ves-lbtc']).toFixed(2));
+      $(".change-btc-ves-lbtc").text(change['btc-ves-lbtc']);
       loader(false)
       updateData()
     })
@@ -61,16 +61,16 @@ $(function(){
 	function updateChange(){
 		loader(true)
 		$.getJSON( "https://s3.amazonaws.com/dolartoday/data.json", function( data ) {
-			change['usd-vef-dt'] = data["USD"]["dolartoday"];
+			change['usd-ves-dt'] = data["USD"]["dolartoday"];
 			$.getJSON( "https://api.coinmarketcap.com/v1/ticker/bitcoin/", function( data ) {
 				change['btc-usd-cmc'] = data[0]["price_usd"];
         $.getJSON( "https://cors-anywhere.herokuapp.com/https://localbitcoins.com/bitcoinaverage/ticker-all-currencies/", function( data ) {
-          change['btc-vef-lbtc'] = data["VEF"]["avg_1h"];
-          change['usd-vef-lbtc'] = change['btc-vef-lbtc']/change['btc-usd-cmc'];
-          $(".change-usd-vef-dt").text(change['usd-vef-dt']);
-          $(".change-usd-vef-lbtc").text(parseFloat(change['usd-vef-lbtc']).toFixed(2));
+          change['btc-ves-lbtc'] = data["VES"]["avg_1h"];
+          change['usd-ves-lbtc'] = change['btc-ves-lbtc']/change['btc-usd-cmc'];
+          $(".change-usd-ves-dt").text(change['usd-ves-dt']);
+          $(".change-usd-ves-lbtc").text(parseFloat(change['usd-ves-lbtc']).toFixed(2));
   				$(".change-btc-usd-cmc").text(change['btc-usd-cmc']);
-          $(".change-btc-vef-lbtc").text(change['btc-vef-lbtc']);
+          $(".change-btc-ves-lbtc").text(change['btc-ves-lbtc']);
   				loader(false)
   				updateData()
         })
@@ -98,17 +98,17 @@ $(function(){
 			case 'btc':
 				$('.rs-btc').html( parseFloat(data_input).toFixed(8) );
 				$('.rs-usd').html( (rule3(data_input, change['btc-usd-cmc'])).toFixed(2) );
-				$('.rs-vef').html( (rule3(data_input, change['btc-vef-lbtc'])).toFixed(2) );
+				$('.rs-ves').html( (rule3(data_input, change['btc-ves-lbtc'])).toFixed(2) );
 				break;
 			case 'usd':
         $('.rs-usd').html( parseFloat(data_input).toFixed(2) );
         $('.rs-btc').html( ((data_input * 1) / change['btc-usd-cmc']).toFixed(8) );
-				$('.rs-vef').html( (rule3(data_input, 1) * change['usd-vef-dt']).toFixed(2) );
+				$('.rs-ves').html( (rule3(data_input, 1) * change['usd-ves-dt']).toFixed(2) );
 				break;
-			case 'vef':
-				$('.rs-btc').html( ((data_input * 1 )/ change['btc-vef-lbtc']).toFixed(8) );
-				$('.rs-usd').html( ((data_input * 1 )/ change['usd-vef-dt']).toFixed(2) );
-				$('.rs-vef').html( parseFloat(data_input).toFixed(2) );
+			case 'ves':
+				$('.rs-btc').html( ((data_input * 1 )/ change['btc-ves-lbtc']).toFixed(8) );
+				$('.rs-usd').html( ((data_input * 1 )/ change['usd-ves-dt']).toFixed(2) );
+				$('.rs-ves').html( parseFloat(data_input).toFixed(2) );
 				break;
 		}
 	}
@@ -135,9 +135,9 @@ $(function(){
     }else if(usd = getQueryVariable('usd')){
       $('#data-input').val(usd);
       $('#data-type').val('usd');
-    }else if(vef = getQueryVariable('vef')){
-      $('#data-input').val(vef);
-      $('#data-type').val('vef');
+    }else if(ves = getQueryVariable('ves')){
+      $('#data-input').val(ves);
+      $('#data-type').val('ves');
     }
   }
 
