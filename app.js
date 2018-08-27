@@ -43,7 +43,7 @@ $(function(){
     })
     $.getJSON( "https://api.coinmarketcap.com/v1/ticker/bitcoin/", function( data ) {
       change['btc-usd-cmc'] = data[0]["price_usd"];
-      $(".change-btc-usd-cmc").text(change['btc-usd-cmc']);
+      $(".change-btc-usd-cmc").text(parseFloat(change['btc-usd-cmc']).toFixed(2));
       loader(false)
       updateData()
     })
