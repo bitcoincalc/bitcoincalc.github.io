@@ -35,7 +35,47 @@ $(function(){
 
   function updateChange(){
     loader(true)
-    $.getJSON( "https://s3.amazonaws.com/dolartoday/data.json", function( data ) {
+
+    var p_dt = $.getJSON( "https://s3.amazonaws.com/dolartoday/data.json")
+      .then(function(data){
+        change['usd-ves-dt'] = data["USD"]["dolartoday"]
+        $(".change-usd-ves-dt").text(change['usd-ves-dt'])
+      })
+
+    var p_cmc = $.getJSON( "https://api.coinmarketcap.com/v1/ticker/bitcoin/")
+      .then(function(data){
+        change['btc-usd-cmc'] = data[0]["price_usd"]
+        $(".change-btc-usd-cmc").text(parseFloat(change['btc-usd-cmc']).toFixed(2))
+      })
+
+    var p_lbtc = $.getJSON( "https://cors-anywhere.herokuapp.com/https://localbitcoins.com/bitcoinaverage/ticker-all-currencies/")
+      .then(function(data){
+        let v = data["VES"]
+
+        if (typeof v["avg_1h"] !== 'undefined') {
+          change['btc-ves-lbtc'] = v["avg_1h"]
+        }else if (typeof v["avg_6h"] !== 'undefined') {
+          change['btc-ves-lbtc'] = v["avg_6h"]
+        }else if (typeof v["avg_12h"] !== 'undefined') {
+          change['btc-ves-lbtc'] = v["avg_12h"]
+        }else if (typeof v["avg_24h"] !== 'undefined') {
+          change['btc-ves-lbtc'] = v["avg_24h"]
+        }
+
+        $(".change-btc-ves-lbtc").text(change['btc-ves-lbtc'])
+      })
+
+    $.when(p_lbtc, p_cmc).then(function(){
+      change['usd-ves-lbtc'] = change['btc-ves-lbtc']/change['btc-usd-cmc']
+      $(".change-usd-ves-lbtc").text(parseFloat(change['usd-ves-lbtc']).toFixed(2))
+    })
+
+    $.when(p_lbtc, p_cmc, p_dt).then(function(){
+      loader(false)
+      updateData()
+    })
+
+    /*$.getJSON( "https://s3.amazonaws.com/dolartoday/data.json", function( data ) {
       change['usd-ves-dt'] = data["USD"]["dolartoday"];
       $(".change-usd-ves-dt").text(change['usd-ves-dt']);
       loader(false)
@@ -54,30 +94,10 @@ $(function(){
       $(".change-btc-ves-lbtc").text(change['btc-ves-lbtc']);
       loader(false)
       updateData()
-    })
-  }
+    })*/
 
-  /*
-	function updateChange(){
-		loader(true)
-		$.getJSON( "https://s3.amazonaws.com/dolartoday/data.json", function( data ) {
-			change['usd-ves-dt'] = data["USD"]["dolartoday"];
-			$.getJSON( "https://api.coinmarketcap.com/v1/ticker/bitcoin/", function( data ) {
-				change['btc-usd-cmc'] = data[0]["price_usd"];
-        $.getJSON( "https://cors-anywhere.herokuapp.com/https://localbitcoins.com/bitcoinaverage/ticker-all-currencies/", function( data ) {
-          change['btc-ves-lbtc'] = data["VES"]["avg_1h"];
-          change['usd-ves-lbtc'] = change['btc-ves-lbtc']/change['btc-usd-cmc'];
-          $(".change-usd-ves-dt").text(change['usd-ves-dt']);
-          $(".change-usd-ves-lbtc").text(parseFloat(change['usd-ves-lbtc']).toFixed(2));
-  				$(".change-btc-usd-cmc").text(change['btc-usd-cmc']);
-          $(".change-btc-ves-lbtc").text(change['btc-ves-lbtc']);
-  				loader(false)
-  				updateData()
-        })
-			})
-		})
-	}
-  */
+
+  }
 
 	function loader(on){
 		if(on){
