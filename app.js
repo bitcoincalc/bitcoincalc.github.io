@@ -163,5 +163,5 @@ $(function(){
 
 	updateChange();
 
-	setInterval(function(){ updateChange() }, 36000000);
+	setInterval(function(){ updateChange() }, 300000);
 });
