@@ -73,6 +73,9 @@ $(function(){
     $.when(p_lbtc, p_cmc, p_dt).then(function(){
       loader(false)
       updateData()
+    }, function(){
+      loader(false)
+      updateData()
     })
 
     /*$.getJSON( "https://s3.amazonaws.com/dolartoday/data.json", function( data ) {
