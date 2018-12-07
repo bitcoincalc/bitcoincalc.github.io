@@ -107,6 +107,9 @@ $(function(){
     $.when(p_lbtc, p_cmc, p_dt).then(function(){
       loader(false)
       updateData()
+    }, function(){
+      loader(false)
+      updateData()
     })
 
   }
@@ -175,7 +178,7 @@ $(function(){
 
 	updateChange();
 
-	setInterval(function(){ updateChange() }, 36000000);
+	setInterval(function(){ updateChange() }, 300000);
 });
 
 function combineKey(arrayKeys, arrayValues){
