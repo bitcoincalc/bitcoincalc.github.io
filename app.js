@@ -6,6 +6,7 @@ $(function(){
 		"btc-usd-cmc": null,
     "btc-ves-lbtc": null,
     "usd-ves-lbtc": null,
+    "usd-ves-airtm": null,
 	}
 
 	$('#btn-update').on('click', function(){
@@ -65,6 +66,39 @@ $(function(){
         $(".change-btc-ves-lbtc").text(change['btc-ves-lbtc'])
       })
 
+    var p_airtm = $.ajax({
+        type: "GET",
+        url: "https://airtmrates.com/rates",
+        dataType: "text",
+      }).then(function(csv){ // success
+
+        //$(".change-usd-ves-airtm").html('<i class="fa fa-flag fa-fw" aria-hidden="true"></i>')
+
+        csvLines = csv.split(/[\r?\n|\r|\n]+/)
+
+        var header = null
+        var line
+        for (var i = 0; i < csvLines.length; i++){
+          if (csvLines[i].length > 0) {
+            if(header==null){
+              header = csvLines[i].split(",")
+            }else{
+              line = csvLines[i].split(",")
+              line = combineKey(header, line)
+              if(line['Code'] == 'VES'){
+                //console.log(line)
+                change['usd-ves-airtm'] = line['Rate']
+                $(".change-usd-ves-airtm").text(change['usd-ves-airtm'])
+                break;
+              }
+            }
+          }
+        }
+
+      }, function(){ // error
+        $(".change-usd-ves-airtm").html('<i class="fa fa-exclamation fa-fw" aria-hidden="true" title="Error reading sources"></i>')
+      })
+
     $.when(p_lbtc, p_cmc).then(function(){
       change['usd-ves-lbtc'] = change['btc-ves-lbtc']/change['btc-usd-cmc']
       $(".change-usd-ves-lbtc").text(parseFloat(change['usd-ves-lbtc']).toFixed(2))
@@ -74,28 +108,6 @@ $(function(){
       loader(false)
       updateData()
     })
-
-    /*$.getJSON( "https://s3.amazonaws.com/dolartoday/data.json", function( data ) {
-      change['usd-ves-dt'] = data["USD"]["dolartoday"];
-      $(".change-usd-ves-dt").text(change['usd-ves-dt']);
-      loader(false)
-      updateData()
-    })
-    $.getJSON( "https://api.coinmarketcap.com/v1/ticker/bitcoin/", function( data ) {
-      change['btc-usd-cmc'] = data[0]["price_usd"];
-      $(".change-btc-usd-cmc").text(parseFloat(change['btc-usd-cmc']).toFixed(2));
-      loader(false)
-      updateData()
-    })
-    $.getJSON( "https://cors-anywhere.herokuapp.com/https://localbitcoins.com/bitcoinaverage/ticker-all-currencies/", function( data ) {
-      change['btc-ves-lbtc'] = data["VES"]["avg_1h"];
-      change['usd-ves-lbtc'] = change['btc-ves-lbtc']/change['btc-usd-cmc'];
-      $(".change-usd-ves-lbtc").text(parseFloat(change['usd-ves-lbtc']).toFixed(2));
-      $(".change-btc-ves-lbtc").text(change['btc-ves-lbtc']);
-      loader(false)
-      updateData()
-    })*/
-
 
   }
 
@@ -165,3 +177,11 @@ $(function(){
 
 	setInterval(function(){ updateChange() }, 36000000);
 });
+
+function combineKey(arrayKeys, arrayValues){
+  var arrayResult = [];
+  for(var i=0; i<arrayKeys.length; i++){
+    arrayResult[arrayKeys[i]] = arrayValues[i]
+  }
+  return arrayResult
+}
